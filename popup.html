@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Note</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="popup-body">
+  <div class="container">
+    <div class="header">
+      <h1 data-i18n="appName">Web Note</h1>
+      <button id="openOptions" class="secondary icon-btn" data-i18n="optionsBtn">⚙️ Options</button>
+    </div>
+
+    <div id="urlDisplay" class="url-display" data-i18n="loading">Loading...</div>
+
+    <div id="viewMode" style="display: none;">
+      <div class="card">
+        <h3 id="noteTitleDisplay"></h3>
+        <p id="noteContentDisplay" style="white-space: pre-wrap;"></p>
+      </div>
+      <div class="actions" style="margin-top: 16px;">
+        <button id="editBtn" style="flex: 1;" data-i18n="editBtn">Edit</button>
+        <button id="deleteBtn" class="danger" data-i18n="deleteBtn">Delete</button>
+      </div>
+    </div>
+
+    <div id="editMode" style="display: none;">
+      <div class="form-group">
+        <label for="noteTitle" data-i18n="titleLabel">Title</label>
+        <input type="text" id="noteTitle" data-i18n="titlePlaceholder" placeholder="Enter a title...">
+      </div>
+      <div class="form-group">
+        <label for="noteContent" data-i18n="noteLabel">Note</label>
+        <textarea id="noteContent" data-i18n="notePlaceholder" placeholder="Enter your note here..."></textarea>
+      </div>
+      <div class="actions" style="margin-top: 16px;">
+        <button id="saveBtn" style="flex: 1;" data-i18n="saveBtn">Save Note</button>
+        <button id="cancelBtn" class="secondary" data-i18n="cancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>

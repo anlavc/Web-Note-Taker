@@ -1,0 +1,118 @@
+{
+    "appName": {
+        "message": "Web Note Taker",
+        "description": "The name of the application"
+    },
+    "appDesc": {
+        "message": "Leave notes on specific web pages and export them.",
+        "description": "The description of the application"
+    },
+    "optionsBtn": {
+        "message": "Options",
+        "description": "Button to open options page"
+    },
+    "loading": {
+        "message": "Loading...",
+        "description": "Loading text"
+    },
+    "noUrl": {
+        "message": "No URL found",
+        "description": "Text when no URL is detected"
+    },
+    "editBtn": {
+        "message": "Edit",
+        "description": "Edit button text"
+    },
+    "deleteBtn": {
+        "message": "Delete",
+        "description": "Delete button text"
+    },
+    "titleLabel": {
+        "message": "Title",
+        "description": "Label for title input"
+    },
+    "titlePlaceholder": {
+        "message": "Enter a title...",
+        "description": "Placeholder for title input"
+    },
+    "noteLabel": {
+        "message": "Note",
+        "description": "Label for note input"
+    },
+    "notePlaceholder": {
+        "message": "Enter your note here...",
+        "description": "Placeholder for note input"
+    },
+    "saveBtn": {
+        "message": "Save Note",
+        "description": "Save button text"
+    },
+    "cancelBtn": {
+        "message": "Cancel",
+        "description": "Cancel button text"
+    },
+    "savedNotesTitle": {
+        "message": "Saved Notes",
+        "description": "Title on options page"
+    },
+    "exportJsonBtn": {
+        "message": "Export to JSON",
+        "description": "Button to export to JSON"
+    },
+    "exportCsvBtn": {
+        "message": "Export to Excel (CSV)",
+        "description": "Button to export to CSV"
+    },
+    "clearAllBtn": {
+        "message": "Clear All Notes",
+        "description": "Button to clear all notes"
+    },
+    "tableTitle": {
+        "message": "Title",
+        "description": "Table header for title"
+    },
+    "tableUrl": {
+        "message": "URL",
+        "description": "Table header for URL"
+    },
+    "tableDate": {
+        "message": "Date",
+        "description": "Table header for date"
+    },
+    "tableActions": {
+        "message": "Actions",
+        "description": "Table header for actions"
+    },
+    "emptyState": {
+        "message": "No notes saved yet.",
+        "description": "Text when list is empty"
+    },
+    "confirmDelete": {
+        "message": "Are you sure you want to delete this note?",
+        "description": "Confirmation dialog for deleting a note"
+    },
+    "confirmClearAll": {
+        "message": "Are you sure you want to delete ALL notes? This cannot be undone.",
+        "description": "Confirmation dialog for clearing all notes"
+    },
+    "alertNoExport": {
+        "message": "No notes to export.",
+        "description": "Alert when trying to export empty list"
+    },
+    "alertEnterContent": {
+        "message": "Please enter a title or content.",
+        "description": "Alert when saving empty note"
+    },
+    "searchPlaceholder": {
+        "message": "Search notes...",
+        "description": "Placeholder for search input"
+    },
+    "contextMenuTitle": {
+        "message": "Add to Web Note",
+        "description": "Context menu item title"
+    },
+    "tableNote": {
+        "message": "Note",
+        "description": "Table header for note content"
+    }
+}

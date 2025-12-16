@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Note - Options</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="options-body">
+    <div class="container">
+        <div class="header">
+            <h1 data-i18n="savedNotesTitle">Saved Notes</h1>
+            <div class="actions">
+                <button id="exportBtn" data-i18n="exportJsonBtn">Export to JSON</button>
+                <button id="exportCsvBtn" class="secondary" data-i18n="exportCsvBtn">Export to Excel (CSV)</button>
+                <button id="clearAllBtn" class="danger" data-i18n="clearAllBtn">Clear All Notes</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="margin-bottom: 16px;">
+                <input type="text" id="searchInput" data-i18n="searchPlaceholder" placeholder="Search notes...">
+            </div>
+            <div id="notesList">
+                <!-- Notes will be populated here -->
+                <div class="empty-state" data-i18n="loading">Loading notes...</div>
+            </div>
+        </div>
+    </div>
+    <script src="i18n.js"></script>
+    <script src="options.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+{
+    "appName": {
+        "message": "Web Not Defteri",
+        "description": "The name of the application"
+    },
+    "appDesc": {
+        "message": "Web sayfalarına not bırakın ve dışa aktarın.",
+        "description": "The description of the application"
+    },
+    "optionsBtn": {
+        "message": "Ayarlar",
+        "description": "Button to open options page"
+    },
+    "loading": {
+        "message": "Yükleniyor...",
+        "description": "Loading text"
+    },
+    "noUrl": {
+        "message": "URL bulunamadı",
+        "description": "Text when no URL is detected"
+    },
+    "editBtn": {
+        "message": "Düzenle",
+        "description": "Edit button text"
+    },
+    "deleteBtn": {
+        "message": "Sil",
+        "description": "Delete button text"
+    },
+    "titleLabel": {
+        "message": "Başlık",
+        "description": "Label for title input"
+    },
+    "titlePlaceholder": {
+        "message": "Bir başlık girin...",
+        "description": "Placeholder for title input"
+    },
+    "noteLabel": {
+        "message": "Not",
+        "description": "Label for note input"
+    },
+    "notePlaceholder": {
+        "message": "Notunuzu buraya yazın...",
+        "description": "Placeholder for note input"
+    },
+    "saveBtn": {
+        "message": "Kaydet",
+        "description": "Save button text"
+    },
+    "cancelBtn": {
+        "message": "İptal",
+        "description": "Cancel button text"
+    },
+    "savedNotesTitle": {
+        "message": "Kayıtlı Notlar",
+        "description": "Title on options page"
+    },
+    "exportJsonBtn": {
+        "message": "JSON Olarak İndir",
+        "description": "Button to export to JSON"
+    },
+    "exportCsvBtn": {
+        "message": "Excel (CSV) Olarak İndir",
+        "description": "Button to export to CSV"
+    },
+    "clearAllBtn": {
+        "message": "Tüm Notları Sil",
+        "description": "Button to clear all notes"
+    },
+    "tableTitle": {
+        "message": "Başlık",
+        "description": "Table header for title"
+    },
+    "tableUrl": {
+        "message": "URL",
+        "description": "Table header for URL"
+    },
+    "tableDate": {
+        "message": "Tarih",
+        "description": "Table header for date"
+    },
+    "tableActions": {
+        "message": "İşlemler",
+        "description": "Table header for actions"
+    },
+    "emptyState": {
+        "message": "Henüz kaydedilmiş not yok.",
+        "description": "Text when list is empty"
+    },
+    "confirmDelete": {
+        "message": "Bu notu silmek istediğinize emin misiniz?",
+        "description": "Confirmation dialog for deleting a note"
+    },
+    "confirmClearAll": {
+        "message": "TÜM notları silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+        "description": "Confirmation dialog for clearing all notes"
+    },
+    "alertNoExport": {
+        "message": "Dışa aktarılacak not yok.",
+        "description": "Alert when trying to export empty list"
+    },
+    "alertEnterContent": {
+        "message": "Lütfen bir başlık veya içerik girin.",
+        "description": "Alert when saving empty note"
+    },
+    "searchPlaceholder": {
+        "message": "Notlarda ara...",
+        "description": "Placeholder for search input"
+    },
+    "contextMenuTitle": {
+        "message": "Web Notuna Ekle",
+        "description": "Context menu item title"
+    },
+    "tableNote": {
+        "message": "Not İçeriği",
+        "description": "Table header for note content"
+    }
+}
