@@ -32,3 +32,6 @@ Bu Chrome eklentisi, ziyaret ettiğiniz web sayfalarına özel notlar almanızı
 2.  Tarayıcı araç çubuğundaki eklenti ikonuna tıklayın.
 3.  Notunuzu yazın ve **Kaydet** butonuna basın.
 4.  Tüm notları görmek için popup penceresindeki **Ayarlar** butonuna tıklayın.
+
+![Screenshot_1](https://github.com/user-attachments/assets/61a618e3-05b3-4e6b-8893-4ad5f1dc895f)
+![Screenshot_3](https://github.com/user-attachments/assets/1dfec57b-7c74-4e35-9104-20970a964ea5)
