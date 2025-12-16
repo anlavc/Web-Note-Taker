@@ -14,14 +14,73 @@ body {
   margin: 0;
   padding: 0;
   font-size: 14px;
+  height: 100%;
+  /* For full height responsiveness if needed */
+}
+
+html {
+  height: 100%;
 }
 
 /* Popup specific */
 body.popup-body {
-  width: 350px;
-  min-height: 400px;
-  padding: 16px;
+  width: 100%;
+  min-width: 350px;
+  max-width: 600px;
+  /* Allow it to grow if the window is larger (devtools etc) */
+  min-height: auto;
+  /* Remove fixed min-height to reduce whitespace */
+  padding: 24px;
+  background-color: #f8fafc;
+  /* Softer background */
+  box-sizing: border-box;
+  /* IMPORTANT for padding calculations */
 }
+
+/* Ensure container allows resizing */
+.container {
+  width: 100%;
+}
+
+
+/* Form Groups in Popup */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+body.popup-body input[type="text"],
+body.popup-body textarea,
+body.popup-body select {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+body.popup-body input[type="text"]:focus,
+body.popup-body textarea:focus,
+body.popup-body select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+
+body.popup-body textarea {
+  min-height: 150px;
+  line-height: 1.5;
+}
+
 
 /* Options specific */
 body.options-body {
@@ -30,7 +89,9 @@ body.options-body {
   padding: 40px 20px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin-top: 0;
   color: #111827;
 }
@@ -52,7 +113,7 @@ h1 {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 label {
@@ -150,7 +211,8 @@ table {
   margin-top: 16px;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 12px;
   border-bottom: 1px solid var(--border-color);
@@ -172,9 +234,110 @@ tr:hover td {
 .actions {
   display: flex;
   gap: 8px;
+  margin-bottom: 16px;
+  /* Added spacing at bottom */
 }
 
+/* ... existing styles ... */
 .icon-btn {
   padding: 4px 8px;
   font-size: 0.75rem;
+}
+
+/* Category Management Styles */
+.category-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.category-form {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: end;
+  background: #f3f4f6;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.color-picker-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-picker-wrapper:hover {
+  transform: scale(1.1);
+  border-color: var(--primary-color);
+}
+
+input[type="color"] {
+  border: none;
+  width: 200%;
+  height: 200%;
+  padding: 0;
+  margin: -50%;
+  cursor: pointer;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  max-width: 200px;
+  /* Limit width */
+}
+
+.category-badge span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.category-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-cat-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.2s, background-color 0.2s;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.delete-cat-btn:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
 }

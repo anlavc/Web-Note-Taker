@@ -1,6 +1,6 @@
 {
     "appName": {
-        "message": "Web Note Taker",
+        "message": "Yaz Kenara",
         "description": "The name of the application"
     },
     "appDesc": {
@@ -110,6 +110,34 @@
     "contextMenuTitle": {
         "message": "Add to Web Note",
         "description": "Context menu item title"
+    },
+    "categoryManagementTitle": {
+        "message": "Manage Categories",
+        "description": "Title for category management section"
+    },
+    "categoryNameLabel": {
+        "message": "Category Name",
+        "description": "Label for category name input"
+    },
+    "categoryColorLabel": {
+        "message": "Color",
+        "description": "Label for category color input"
+    },
+    "addCategoryBtn": {
+        "message": "Add Category",
+        "description": "Button to add a category"
+    },
+    "tableCategory": {
+        "message": "Category",
+        "description": "Table header for category"
+    },
+    "noCategory": {
+        "message": "No Category",
+        "description": "Default text when no category is selected"
+    },
+    "categoryLabel": {
+        "message": "Category",
+        "description": "Label for category select in popup"
     },
     "tableNote": {
         "message": "Note",

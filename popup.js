@@ -4,24 +4,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     const editMode = document.getElementById('editMode');
     const noteTitleDisplay = document.getElementById('noteTitleDisplay');
     const noteContentDisplay = document.getElementById('noteContentDisplay');
-    const noteTitleInput = document.getElementById('noteTitle');
-    const noteContentInput = document.getElementById('noteContent');
+    const titleInput = document.getElementById('titleInput'); // Matched to HTML id="titleInput"
+    const noteInput = document.getElementById('noteContent'); // Matched to HTML id="noteContent"
 
     const openOptionsBtn = document.getElementById('openOptions');
     const editBtn = document.getElementById('editBtn');
     const deleteBtn = document.getElementById('deleteBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const categorySelect = document.getElementById('categorySelect'); // New element
 
     let currentUrl = '';
+    let currentTabId = null; // New variable
 
     // Get current tab URL
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab && tab.url) {
         currentUrl = tab.url;
+        currentTabId = tab.id; // Set currentTabId
         urlDisplay.textContent = new URL(currentUrl).hostname + (new URL(currentUrl).pathname.length > 1 ? '...' : '');
         urlDisplay.title = currentUrl;
         loadNote();
+        loadCategories(); // Load categories when popup opens
     } else {
         urlDisplay.textContent = chrome.i18n.getMessage('noUrl');
     }
@@ -38,6 +42,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // New function to load categories
+    async function loadCategories() {
+        const result = await chrome.storage.local.get(['categories']);
+        const categories = result.categories || [];
+
+        // Keep the first "No Category" option
+        categorySelect.innerHTML = `<option value="">${chrome.i18n.getMessage('noCategory')}</option>`;
+
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.name;
+            categorySelect.appendChild(option);
+        });
+
+        // Re-select if we already loaded the note and it had a category
+        const resultNote = await chrome.storage.local.get([currentUrl]);
+        if (resultNote[currentUrl] && resultNote[currentUrl].categoryId) {
+            categorySelect.value = resultNote[currentUrl].categoryId;
+        }
+    }
+
     function showViewMode(note) {
         noteTitleDisplay.textContent = note.title;
         noteContentDisplay.textContent = note.content;
@@ -47,11 +73,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function showEditMode(isNew = false) {
         if (!isNew) {
-            noteTitleInput.value = noteTitleDisplay.textContent;
-            noteContentInput.value = noteContentDisplay.textContent;
+            titleInput.value = noteTitleDisplay.textContent; // Use titleInput
+            noteInput.value = noteContentDisplay.textContent; // Use noteInput
+            // Set category if it exists in the note
+            chrome.storage.local.get(currentUrl, (result) => {
+                const note = result[currentUrl];
+                if (note && note.categoryId) {
+                    categorySelect.value = note.categoryId;
+                } else {
+                    categorySelect.value = '';
+                }
+            });
         } else {
-            noteTitleInput.value = '';
-            noteContentInput.value = '';
+            titleInput.value = ''; // Use titleInput
+            noteInput.value = ''; // Use noteInput
+            categorySelect.value = ''; // Clear category for new note
         }
         viewMode.style.display = 'none';
         editMode.style.display = 'block';
@@ -73,8 +109,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     saveBtn.addEventListener('click', async () => {
-        const title = noteTitleInput.value.trim();
-        const content = noteContentInput.value.trim();
+        const title = titleInput.value.trim(); // Use titleInput
+        const content = noteInput.value.trim(); // Use noteInput
+        const categoryId = categorySelect.value; // Get selected category
 
         if (!title && !content) {
             alert(chrome.i18n.getMessage('alertEnterContent'));
@@ -85,6 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             title,
             content,
             url: currentUrl,
+            categoryId: categoryId, // Save category
             timestamp: new Date().toISOString()
         };
 

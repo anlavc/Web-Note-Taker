@@ -1,10 +1,10 @@
 {
     "appName": {
-        "message": "Web Not Defteri",
+        "message": "Yaz Kenara",
         "description": "The name of the application"
     },
     "appDesc": {
-        "message": "Web sayfalarına not bırakın ve dışa aktarın.",
+        "message": "Gezdiğiniz web sayfalarına notlar alın, kategorize edin ve saklayın.",
         "description": "The description of the application"
     },
     "optionsBtn": {
@@ -110,6 +110,34 @@
     "contextMenuTitle": {
         "message": "Web Notuna Ekle",
         "description": "Context menu item title"
+    },
+    "categoryManagementTitle": {
+        "message": "Kategori Yönetimi",
+        "description": "Title for category management section"
+    },
+    "categoryNameLabel": {
+        "message": "Kategori Adı",
+        "description": "Label for category name input"
+    },
+    "categoryColorLabel": {
+        "message": "Renk",
+        "description": "Label for category color input"
+    },
+    "addCategoryBtn": {
+        "message": "Kategori Ekle",
+        "description": "Button to add a category"
+    },
+    "tableCategory": {
+        "message": "Kategori",
+        "description": "Table header for category"
+    },
+    "noCategory": {
+        "message": "Kategorisiz",
+        "description": "Default text when no category is selected"
+    },
+    "categoryLabel": {
+        "message": "Kategori",
+        "description": "Label for category select in popup"
     },
     "tableNote": {
         "message": "Not İçeriği",

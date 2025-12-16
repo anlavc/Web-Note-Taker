@@ -1,3 +1,24 @@
+// Icon Management
+function updateIcon(tabId, url) {
+    if (!url || !url.startsWith('http')) {
+        chrome.action.setIcon({ path: "icons/icon16_empty.png", tabId });
+        return;
+    }
+
+    chrome.storage.local.get(url, (result) => {
+        const note = result[url];
+        if (note) {
+            chrome.action.setIcon({ path: "icons/icon16.png", tabId });
+        } else {
+            chrome.action.setIcon({ path: "icons/icon16_empty.png", tabId });
+        }
+    });
+}
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete' && tab.url) {
+        updateIcon(tabId, tab.url);
+    }
 });
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
@@ -53,3 +74,4 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         });
     }
 });
+

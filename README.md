@@ -1,10 +1,14 @@
-# Web Not Defteri (Web Note Taker)
+# Yaz Kenara (Web Note)
 
-Bu Chrome eklentisi, ziyaret ettiğiniz web sayfalarına özel notlar almanızı ve bu notları yönetmenizi sağlar.
+Bu Chrome eklentisi, ziyaret ettiğiniz web sayfalarına özel notlar almanızı ("kenara yazmanızı") ve bu notları kategorize ederek yönetmenizi sağlar.
 
 ## Özellikler
 
 *   **Sayfaya Özel Notlar**: Herhangi bir web sayfasındayken eklenti ikonuna tıklayarak o sayfa için başlık ve içerik girebilirsiniz.
+*   **Kategori Yönetimi (YENİ)**:
+    *   Notlarınızı düzenlemek için özel **Kategoriler** (örn: İş, Okul, Kişisel) oluşturabilirsiniz.
+    *   Her kategoriye özel **Renk** atayabilirsiniz.
+    *   Not eklerken kolayca kategori seçebilirsiniz.
 *   **Dinamik İkon**:
     *   Eğer bulunduğunuz sayfada daha önce kaydedilmiş bir not varsa, eklenti ikonu **Mavi** renkli olur.
     *   Not yoksa ikon **İçi Boş** (sadece çerçeve) görünür.
@@ -15,7 +19,7 @@ Bu Chrome eklentisi, ziyaret ettiğiniz web sayfalarına özel notlar almanızı
     *   Notları silebilir veya düzenleyebilirsiniz.
 *   **Dışa Aktarma (Export)**:
     *   **JSON**: Tüm notlarınızı yedeklemek için JSON formatında indirebilirsiniz.
-    *   **Excel (CSV)**: Notlarınızı Excel'de açılabilir CSV formatında indirebilirsiniz.
+    *   **Excel (CSV)**: Notlarınızı Excel uyumlu (noktalı virgül ayracı ile) CSV formatında indirebilirsiniz. (Kategori bilgisi içerir)
 *   **Çoklu Dil Desteği**: Tarayıcınızın diline göre otomatik olarak **Türkçe** veya **İngilizce** çalışır.
 
 ## Kurulum
@@ -26,12 +30,10 @@ Bu Chrome eklentisi, ziyaret ettiğiniz web sayfalarına özel notlar almanızı
 4.  **Paketlenmemiş öğe yükle** (Load unpacked) butonuna tıklayın.
 5.  İndirdiğiniz proje klasörünü seçin.
 
+
 ## Kullanım
 
 1.  Bir web sayfasına gidin.
 2.  Tarayıcı araç çubuğundaki eklenti ikonuna tıklayın.
 3.  Notunuzu yazın ve **Kaydet** butonuna basın.
 4.  Tüm notları görmek için popup penceresindeki **Ayarlar** butonuna tıklayın.
-
-![Screenshot_1](https://github.com/user-attachments/assets/61a618e3-05b3-4e6b-8893-4ad5f1dc895f)
-![Screenshot_3](https://github.com/user-attachments/assets/1dfec57b-7c74-4e35-9104-20970a964ea5)
