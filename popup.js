@@ -1,27 +1,40 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // Apply theme immediately
+    chrome.storage.local.get('theme', (result) => {
+        if (result.theme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    });
+
     const urlDisplay = document.getElementById('urlDisplay');
     const viewMode = document.getElementById('viewMode');
     const editMode = document.getElementById('editMode');
     const noteTitleDisplay = document.getElementById('noteTitleDisplay');
     const noteContentDisplay = document.getElementById('noteContentDisplay');
-    const titleInput = document.getElementById('titleInput'); // Matched to HTML id="titleInput"
-    const noteInput = document.getElementById('noteContent'); // Matched to HTML id="noteContent"
+    const titleInput = document.getElementById('titleInput');
+    const noteInput = document.getElementById('noteContent');
 
+    // Buttons
     const openOptionsBtn = document.getElementById('openOptions');
     const editBtn = document.getElementById('editBtn');
     const deleteBtn = document.getElementById('deleteBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
-    const categorySelect = document.getElementById('categorySelect'); // New element
+    const categorySelect = document.getElementById('categorySelect');
+
+    const takeScreenshotBtn = document.getElementById('takeScreenshotBtn');
+    const screenshotPreview = document.getElementById('screenshotPreview');
+    const screenshotDisplay = document.getElementById('screenshotDisplay');
+    const removeScreenshotBtn = document.getElementById('removeScreenshotBtn');
+    const noteScreenshotView = document.getElementById('noteScreenshotView'); // For View Mode
 
     let currentUrl = '';
-    let currentTabId = null; // New variable
+    let currentScreenshotInfo = null; // To store dataUrl
 
     // Get current tab URL
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab && tab.url) {
         currentUrl = tab.url;
-        currentTabId = tab.id; // Set currentTabId
         urlDisplay.textContent = new URL(currentUrl).hostname + (new URL(currentUrl).pathname.length > 1 ? '...' : '');
         urlDisplay.title = currentUrl;
         loadNote();
@@ -42,8 +55,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // New function to load categories
+    // Load categories
     async function loadCategories() {
+        if (!categorySelect) return;
+
         const result = await chrome.storage.local.get(['categories']);
         const categories = result.categories || [];
 
@@ -58,82 +73,189 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Re-select if we already loaded the note and it had a category
-        const resultNote = await chrome.storage.local.get([currentUrl]);
-        if (resultNote[currentUrl] && resultNote[currentUrl].categoryId) {
-            categorySelect.value = resultNote[currentUrl].categoryId;
+        if (currentUrl) {
+            const resultNote = await chrome.storage.local.get([currentUrl]);
+            if (resultNote[currentUrl] && resultNote[currentUrl].categoryId) {
+                categorySelect.value = resultNote[currentUrl].categoryId;
+            }
         }
     }
 
-    function showViewMode(note) {
-        noteTitleDisplay.textContent = note.title;
-        noteContentDisplay.textContent = note.content;
-        viewMode.style.display = 'block';
-        editMode.style.display = 'none';
+    // Screenshot Logic
+    if (takeScreenshotBtn) {
+        takeScreenshotBtn.addEventListener('click', () => {
+            chrome.tabs.captureVisibleTab(null, { format: 'jpeg', quality: 50 }, (dataUrl) => {
+                if (chrome.runtime.lastError) {
+                    alert('Error capturing screenshot: ' + chrome.runtime.lastError.message);
+                    return;
+                }
+
+                // Resize image to reduce storage size
+                resizeImage(dataUrl, 800, (resizedDataUrl) => {
+                    currentScreenshotInfo = resizedDataUrl;
+                    showScreenshotPreview(resizedDataUrl);
+                });
+            });
+        });
     }
 
+    if (removeScreenshotBtn) {
+        removeScreenshotBtn.addEventListener('click', () => {
+            currentScreenshotInfo = null;
+            if (screenshotPreview) screenshotPreview.style.display = 'none';
+        });
+    }
+
+    function showScreenshotPreview(dataUrl) {
+        if (screenshotDisplay) {
+            screenshotDisplay.src = dataUrl;
+        }
+        if (screenshotPreview) {
+            screenshotPreview.style.display = 'block';
+        }
+    }
+
+    function resizeImage(url, maxWidth, callback) {
+        const sourceImage = new Image();
+        sourceImage.onload = function () {
+            const canvas = document.createElement("canvas");
+            let width = sourceImage.width;
+            let height = sourceImage.height;
+
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(sourceImage, 0, 0, width, height);
+
+            callback(canvas.toDataURL("image/jpeg", 0.7));
+        }
+        sourceImage.src = url;
+    }
+
+    // View Mode
+    function showViewMode(note) {
+        if (noteTitleDisplay) noteTitleDisplay.textContent = note.title;
+        if (noteContentDisplay) noteContentDisplay.textContent = note.content;
+
+        if (note.screenshot && noteScreenshotView) {
+            noteScreenshotView.src = note.screenshot;
+            noteScreenshotView.style.display = 'block';
+            noteScreenshotView.onclick = () => {
+                const newTab = window.open();
+                newTab.document.write(`<img src="${note.screenshot}" style="max-width: 100%;">`);
+            };
+            noteScreenshotView.style.cursor = 'pointer';
+        } else if (noteScreenshotView) {
+            noteScreenshotView.style.display = 'none';
+        }
+
+        if (viewMode) viewMode.style.display = 'block';
+        if (editMode) editMode.style.display = 'none';
+    }
+
+    // Edit Mode
     function showEditMode(isNew = false) {
         if (!isNew) {
-            titleInput.value = noteTitleDisplay.textContent; // Use titleInput
-            noteInput.value = noteContentDisplay.textContent; // Use noteInput
-            // Set category if it exists in the note
+            if (titleInput && noteTitleDisplay) titleInput.value = noteTitleDisplay.textContent;
+            if (noteInput && noteContentDisplay) noteInput.value = noteContentDisplay.textContent;
+
             chrome.storage.local.get(currentUrl, (result) => {
                 const note = result[currentUrl];
-                if (note && note.categoryId) {
+                // Category handling
+                if (note && note.categoryId && categorySelect) {
                     categorySelect.value = note.categoryId;
-                } else {
+                } else if (categorySelect) {
                     categorySelect.value = '';
+                }
+
+                // Screenshot handling
+                if (note && note.screenshot) {
+                    currentScreenshotInfo = note.screenshot;
+                    showScreenshotPreview(note.screenshot);
+                } else {
+                    currentScreenshotInfo = null;
+                    if (screenshotPreview) screenshotPreview.style.display = 'none';
                 }
             });
         } else {
-            titleInput.value = ''; // Use titleInput
-            noteInput.value = ''; // Use noteInput
-            categorySelect.value = ''; // Clear category for new note
+            if (titleInput) titleInput.value = '';
+            if (noteInput) noteInput.value = '';
+            if (categorySelect) categorySelect.value = '';
+            currentScreenshotInfo = null;
+            if (screenshotPreview) screenshotPreview.style.display = 'none';
         }
-        viewMode.style.display = 'none';
-        editMode.style.display = 'block';
 
-        cancelBtn.style.display = isNew ? 'none' : 'inline-block';
+        if (viewMode) viewMode.style.display = 'none';
+        if (editMode) editMode.style.display = 'block';
+        if (cancelBtn) cancelBtn.style.display = isNew ? 'none' : 'inline-block';
     }
 
     // Event Listeners
-    openOptionsBtn.addEventListener('click', () => {
-        chrome.runtime.openOptionsPage();
-    });
+    if (openOptionsBtn) {
+        openOptionsBtn.addEventListener('click', () => {
+            chrome.runtime.openOptionsPage();
+        });
+    }
 
-    editBtn.addEventListener('click', () => {
-        showEditMode(false);
-    });
+    if (editBtn) {
+        editBtn.addEventListener('click', () => {
+            showEditMode(false);
+        });
+    }
 
-    cancelBtn.addEventListener('click', () => {
-        loadNote(); // Reload to discard changes and go back to view
-    });
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            loadNote();
+        });
+    }
 
-    saveBtn.addEventListener('click', async () => {
-        const title = titleInput.value.trim(); // Use titleInput
-        const content = noteInput.value.trim(); // Use noteInput
-        const categoryId = categorySelect.value; // Get selected category
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            const title = titleInput ? titleInput.value.trim() : '';
+            const content = noteInput ? noteInput.value.trim() : '';
+            const categoryId = categorySelect ? categorySelect.value : '';
+            const screenshot = currentScreenshotInfo;
 
-        if (!title && !content) {
-            alert(chrome.i18n.getMessage('alertEnterContent'));
-            return;
-        }
+            if (!title && !content && !screenshot) {
+                alert(chrome.i18n.getMessage('alertEnterContent'));
+                return;
+            }
 
-        const noteData = {
-            title,
-            content,
-            url: currentUrl,
-            categoryId: categoryId, // Save category
-            timestamp: new Date().toISOString()
-        };
+            const noteData = {
+                title,
+                content,
+                url: currentUrl,
+                categoryId,
+                screenshot,
+                timestamp: new Date().toISOString()
+            };
 
-        await chrome.storage.local.set({ [currentUrl]: noteData });
-        loadNote();
-    });
+            try {
+                await chrome.storage.local.set({ [currentUrl]: noteData });
+                loadNote();
+            } catch (e) {
+                if (e.message.includes('QUOTA_BYTES')) {
+                    alert("Error: Note is too large. Please remove the screenshot or shorten text.");
+                } else {
+                    alert("Error saving note: " + e.message);
+                }
+            }
+        });
+    }
 
-    deleteBtn.addEventListener('click', async () => {
-        if (confirm(chrome.i18n.getMessage('confirmDelete'))) {
-            await chrome.storage.local.remove(currentUrl);
-            showEditMode(true);
-        }
-    });
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+            if (confirm(chrome.i18n.getMessage('confirmDelete'))) {
+                await chrome.storage.local.remove(currentUrl);
+                showEditMode(true);
+            }
+        });
+    }
+
 });

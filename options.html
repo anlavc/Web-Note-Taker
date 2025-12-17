@@ -13,6 +13,12 @@
         <div class="header">
             <h1 data-i18n="savedNotesTitle">Saved Notes</h1>
             <div class="actions">
+                <select id="languageSelect" class="secondary"
+                    style="padding: 6px; border-radius: 6px; margin-right: 8px;">
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                </select>
+                <button id="themeToggleBtn" class="secondary" title="Toggle Theme">🌙/☀️</button>
                 <button id="exportBtn" data-i18n="exportJsonBtn">Export to JSON</button>
                 <button id="exportCsvBtn" class="secondary" data-i18n="exportCsvBtn">Export to Excel (CSV)</button>
                 <button id="clearAllBtn" class="danger" data-i18n="clearAllBtn">Clear All Notes</button>
@@ -27,7 +33,8 @@
                 <div class="category-form">
                     <div>
                         <label for="newCategoryName" data-i18n="categoryNameLabel">Category Name</label>
-                        <input type="text" id="newCategoryName" placeholder="e.g. Work, Personal...">
+                        <input type="text" id="newCategoryName" data-i18n="categoryPlaceholder"
+                            placeholder="e.g. Work, Personal...">
                     </div>
                     <div>
                         <label for="newCategoryColor" data-i18n="categoryColorLabel">Color</label>
@@ -49,9 +56,39 @@
         </div>
 
         <div class="card">
-            <div style="margin-bottom: 16px;">
-                <input type="text" id="searchInput" data-i18n="searchPlaceholder" placeholder="Search notes...">
+            <h2 data-i18n="filterTitle" style="margin-top: 0;">Filters</h2>
+            <div class="filter-controls"
+                style="display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="searchInput" data-i18n="searchLabel">Search</label>
+                    <input type="text" id="searchInput" data-i18n="searchInputPlaceholder"
+                        placeholder="Title, content or URL...">
+                </div>
+
+                <div style="min-width: 150px;">
+                    <label for="filterCategory" data-i18n="filterCategoryLabel">Category</label>
+                    <select id="filterCategory"
+                        style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--input-bg); color: var(--text-color);">
+                        <option value="" data-i18n="allCategories">All Categories</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filterStartDate" data-i18n="filterStartDateLabel">Start Date</label>
+                    <input type="date" id="filterStartDate" style="padding: 7px;">
+                </div>
+
+                <div>
+                    <label for="filterEndDate" data-i18n="filterEndDateLabel">End Date</label>
+                    <input type="date" id="filterEndDate" style="padding: 7px;">
+                </div>
+
+                <div>
+                    <button id="clearFiltersBtn" class="secondary" data-i18n="clearFiltersBtn">Clear Filters</button>
+                </div>
             </div>
+
             <div id="notesList">
                 <!-- Notes will be populated here -->
                 <div class="empty-state" data-i18n="loading">Loading notes...</div>

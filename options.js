@@ -10,12 +10,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const newCategoryColor = document.getElementById('newCategoryColor');
     const addCategoryBtn = document.getElementById('addCategoryBtn');
     const categoriesList = document.getElementById('categoriesList');
+    const themeToggleBtn = document.getElementById('themeToggleBtn'); // New
 
     let allNotes = [];
     let allCategories = [];
 
     // Initialize
     loadData();
+    initTheme(); // New
+
+    // --- Theme Logic ---
+    function initTheme() {
+        chrome.storage.local.get('theme', (result) => {
+            const theme = result.theme || 'light';
+            applyTheme(theme);
+        });
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleBtn.textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggleBtn.textContent = '🌙';
+        }
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('dark-mode');
+        const newTheme = isDark ? 'light' : 'dark';
+        applyTheme(newTheme);
+        chrome.storage.local.set({ theme: newTheme });
+    });
 
     async function loadData() {
         // Load categories and notes together to ensure categories are available for notes rendering
@@ -47,37 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCategories();
     });
 
-    function renderCategories() {
-        categoriesList.innerHTML = '';
-        allCategories.forEach(cat => {
-            const tag = document.createElement('div');
-            tag.className = 'category-badge';
-            tag.style.backgroundColor = `${cat.color}20`;
-            tag.style.border = `1px solid ${cat.color}`;
-            tag.style.color = cat.color;
 
-            const span = document.createElement('span');
-            span.textContent = cat.name;
-            tag.appendChild(span);
-
-            const delBtn = document.createElement('button');
-            delBtn.className = 'delete-cat-btn';
-            delBtn.innerHTML = '×'; // or use an SVG icon
-            delBtn.title = 'Delete Category';
-
-            delBtn.onclick = async () => {
-                if (confirm('Delete this category?')) {
-                    allCategories = allCategories.filter(c => c.id !== cat.id);
-                    await chrome.storage.local.set({ categories: allCategories });
-                    renderCategories();
-                    loadNotes(); // Re-render notes to clear deleted category tags
-                }
-            };
-            tag.appendChild(delBtn);
-
-            categoriesList.appendChild(tag);
-        });
-    }
 
     // --- Note Logic ---
 
@@ -165,14 +162,103 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const filteredNotes = allNotes.filter(note =>
-            (note.title && note.title.toLowerCase().includes(query)) ||
-            (note.content && note.content.toLowerCase().includes(query)) ||
-            (note.url && note.url.toLowerCase().includes(query))
-        );
+    // Filter Elements
+    const filterCategory = document.getElementById('filterCategory');
+    const filterStartDate = document.getElementById('filterStartDate');
+    const filterEndDate = document.getElementById('filterEndDate');
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+    // ... existing initialization ...
+
+    // Updated renderCategories to populate filter dropdown too
+    function renderCategories() {
+        categoriesList.innerHTML = '';
+
+        // Update Filter Dropdown
+        const currentFilterVal = filterCategory.value;
+        filterCategory.innerHTML = `<option value="">${chrome.i18n.getMessage('allCategories')}</option>`;
+
+        allCategories.forEach(cat => {
+            // ... (existing category list rendering) ...
+            const tag = document.createElement('div');
+            tag.className = 'category-badge';
+            tag.style.backgroundColor = `${cat.color}20`;
+            tag.style.border = `1px solid ${cat.color}`;
+            tag.style.color = cat.color;
+
+            const span = document.createElement('span');
+            span.textContent = cat.name;
+            tag.appendChild(span);
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-cat-btn';
+            delBtn.innerHTML = '×';
+            delBtn.title = 'Delete Category';
+
+            delBtn.onclick = async () => {
+                if (confirm('Delete this category?')) {
+                    allCategories = allCategories.filter(c => c.id !== cat.id);
+                    await chrome.storage.local.set({ categories: allCategories });
+                    renderCategories();
+                    loadNotes();
+                }
+            };
+            tag.appendChild(delBtn);
+            categoriesList.appendChild(tag);
+
+            // Add to Filter Dropdown
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.name;
+            filterCategory.appendChild(option);
+        });
+
+        filterCategory.value = currentFilterVal; // Restore selection
+    }
+
+    // Advanced Filtering Logic
+    function filterNotes() {
+        const query = searchInput.value.toLowerCase();
+        const categoryId = filterCategory.value;
+        const startDate = filterStartDate.value ? new Date(filterStartDate.value) : null;
+        const endDate = filterEndDate.value ? new Date(filterEndDate.value) : null;
+
+        if (endDate) endDate.setHours(23, 59, 59); // Include full end day
+
+        const filteredNotes = allNotes.filter(note => {
+            // Text Search
+            const matchesText =
+                (note.title && note.title.toLowerCase().includes(query)) ||
+                (note.content && note.content.toLowerCase().includes(query)) ||
+                (note.url && note.url.toLowerCase().includes(query));
+
+            // Category Filter
+            const matchesCategory = categoryId ? note.categoryId === categoryId : true;
+
+            // Date Filter
+            const noteDate = new Date(note.timestamp);
+            const matchesDate =
+                (!startDate || noteDate >= startDate) &&
+                (!endDate || noteDate <= endDate);
+
+            return matchesText && matchesCategory && matchesDate;
+        });
+
         renderNotes(filteredNotes);
+    }
+
+    // Event Listeners
+    searchInput.addEventListener('input', filterNotes);
+    filterCategory.addEventListener('change', filterNotes);
+    filterStartDate.addEventListener('change', filterNotes);
+    filterEndDate.addEventListener('change', filterNotes);
+
+    clearFiltersBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterCategory.value = '';
+        filterStartDate.value = '';
+        filterEndDate.value = '';
+        filterNotes();
     });
 
     exportBtn.addEventListener('click', async () => {

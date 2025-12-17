@@ -22,6 +22,8 @@
       <div class="card">
         <h3 id="noteTitleDisplay"></h3>
         <p id="noteContentDisplay" style="white-space: pre-wrap;"></p>
+        <img id="noteScreenshotView" src=""
+          style="width: 100%; margin-top: 12px; border-radius: 4px; border: 1px solid #ddd; display: none;">
       </div>
       <div class="actions" style="margin-top: 16px;">
         <button id="editBtn" style="flex: 1;" data-i18n="editBtn">Edit</button>
@@ -46,6 +48,18 @@
         <label for="noteInput" data-i18n="noteLabel">Note</label>
         <textarea id="noteContent" data-i18n="notePlaceholder" placeholder="Enter your note here..."></textarea>
       </div>
+
+      <div class="form-group">
+        <button id="takeScreenshotBtn" class="secondary" style="width: 100%; margin-bottom: 8px;"
+          data-i18n="takeScreenshotBtn">📷 Take
+          Screenshot</button>
+        <div id="screenshotPreview" style="display: none; position: relative;">
+          <img id="screenshotDisplay" src="" style="width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+          <button id="removeScreenshotBtn"
+            style="position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+        </div>
+      </div>
+
       <div class="actions">
         <button id="saveBtn" style="flex: 1;" data-i18n="saveBtn">Save Note</button>
         <button id="cancelBtn" class="secondary" data-i18n="cancelBtn">Cancel</button>
